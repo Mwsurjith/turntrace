@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>TurnTrace</title>
+    <meta name="description" content="visualize any sector, stock and other assets performance for free">
+    <meta name="keywords"
+        content="sector rotational graph, dynamic rotational chart, relative Strength, sector momentum, turntrace">
+
+    <link rel="icon" href="/Assets/favicon.ico" type="image/x-icon">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Space+Grotesk:wght@300..700&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.4.0/fonts/remixicon.css" rel="stylesheet" />
+
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js"></script>
+</head>
+
+<body>
+    <section id="nav-section">
+        <div class="container">
+            <div class="nav-div">
+                <a href="./index.html" class="logo-grp">
+                    <img src="Assets/logo-turn-trace.svg" alt="turn trace logo">
+                </a>
+
+                <div class="menu-grp">
+                    <div class="menu-list-grp">
+                        <button class="menu-item" onclick="openModal('request-modal')">Request</button>
+                        <button class="menu-item" onclick="openModal('support-modal')">Support</button>
+                        <button class="menu-item" onclick="openModal('about-modal')">About</button>
+                    </div>
+                </div>
+
+                <div class="btn-grp">
+                    <button class="btn-sheet-dupicate" id="duplicate-sheet">
+                        <p class="btn-lable">Duplicate Sample Sheet</p>
+                        <svg class="btn-svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                d="M19 3H5C3.9 3 3.01 3.9 3.01 5L3 8V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM19 11H11V19H9V11H5V9H9V5H11V9H19V11Z"
+                                fill="white" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- request modal -->
+    <div id="request-modal" class="modal-bg">
+        <div class="modal-content">
+            <div class="modal-header-div">
+                <h2 class="modal-title">Request</h2>
+                <div class="close-btn" onclick="closeModal('request-modal')">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="modal-body-div">
+                <p class="para-one">
+                    Got any feedback for us to improve the turntrace as a whole. We would like to hear your thoughts.
+                </p>
+
+                <div class="request-pointer-list">
+                    <p class="request-pointer">
+                        Need new feature to control charts?
+                    </p>
+
+                    <p class="request-pointer">
+                        Need help with new calculation logic?
+                    </p>
+
+                    <p class="request-pointer">
+                        Need help with adding new data source?
+                    </p>
+                </div>
+
+                <p class="message">
+                    Drop us a mail to <a href="mailto:mwsurjith51@gmail.com" target="_blank" class="link-text">mwsurjith51@gmail.com</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- support modal -->
+    <div id="support-modal" class="modal-bg">
+        <div class="modal-content">
+            <div class="modal-header-div">
+                <h2 class="modal-title">Support Us</h2>
+                <div class="close-btn" onclick="closeModal('support-modal')">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="modal-body-div">
+                <div class="support-grp">
+                    <div class="qr-code">
+                        <img width="100%" src="Assets/bmc_qr.png"
+                            alt="buy me Coffee qr-code https://buymeacoffee.com/mwsurjith">
+                    </div>
+
+                    <div class="support-content">
+                        <p class="para-one">
+                            Turntrace is a free, meticulously crafted tool, built with dedication.
+                            If you value our work and want to see more, consider supporting us with a
+                            donation—your help fuels ongoing improvements for the Turntrace community.
+                        </p>
+                        <a href="https://buymeacoffee.com/mwsurjith" target="_blank" class="btn-sheet-dupicate">
+                            ☕ Buy me Coffee
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- about modal -->
+    <div id="about-modal" class="modal-bg">
+        <div class="modal-content">
+            <div class="modal-header-div">
+                <h2 class="modal-title">Your Data. Your Rules.</h2>
+                <div class="close-btn" onclick="closeModal('about-modal')">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z">
+                        </path>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="modal-body-div">
+                <div class="about-content-div">
+                    <p class="para-one">
+                        Turn Trace is a free open source visualization tools to analyse relative strength & relative
+                        momentum of multiple sectors/stocks/assets. Feel free to contact us.
+                    </p>
+                </div>
+
+                <div class="author-div">
+                    <div class="author-card-div">
+                        <div class="author-main">
+                            <div class="author-image-div">
+                                <img src="Assets/author.JPG" class="author-img">
+                            </div>
+
+                            <div class="author-content">
+                                <p class="designation">
+                                    Product Designer
+                                </p>
+                                <div class="author-info-div">
+                                    <p class="author-title">
+                                        Surjith
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="author-links-list">
+                            <a href="https://surjith.framer.website/" target="_blank" class="author-link-item">
+                                <p class="author-link">
+                                    Website
+                                </p>
+                            </a>
+
+                            <a href="https://www.linkedin.com/in/mwsurjith/" target="_blank" class="author-link-item">
+                                <p class="author-link">
+                                    Linkedin
+                                </p>
+                            </a>
+
+                            <a href="https://www.instagram.com/mwsurjith/" target="_blank" class="author-link-item"
+                                style="border-right: 0px;">
+                                <p class="author-link">
+                                    Instagram
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="author-card-div">
+                        <div class="author-main">
+                            <div class="author-image-div">
+                                <svg fill="currentColor" width="40px" viewBox="0 0 40 20"
+                                    xmlns="http://www.w3.org/2000/svg" aria-hidden="true" class="size-10">
+                                    <path
+                                        d="M23.3919 0H32.9188C36.7819 0 39.9136 3.13165 39.9136 6.99475V16.0805H36.0006V6.99475C36.0006 6.90167 35.9969 6.80925 35.9898 6.71766L26.4628 16.079C26.4949 16.08 26.5272 16.0805 26.5595 16.0805H36.0006V19.7762H26.5595C22.6964 19.7762 19.4788 16.6139 19.4788 12.7508V3.68923H23.3919V12.7508C23.3919 12.9253 23.4054 13.0977 23.4316 13.2668L33.1682 3.6995C33.0861 3.6927 33.003 3.68923 32.9188 3.68923H23.3919V0Z">
+                                    </path>
+                                    <path
+                                        d="M13.7688 19.0956L0 3.68759H5.53933L13.6231 12.7337V3.68759H17.7535V17.5746C17.7535 19.6705 15.1654 20.6584 13.7688 19.0956Z">
+                                    </path>
+                                </svg>
+                            </div>
+
+                            <div class="author-content">
+                                <p class="designation">
+                                    Developer
+                                </p>
+                                <div class="author-info-div">
+                                    <p class="author-title">
+                                        v0 by Vercel
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="author-links-list">
+                            <a href="https://v0.dev/" target="_blank" class="author-link-item">
+                                <p class="author-link">
+                                    Website
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="hero-section">
+        <div class="container">
+            <div class="page-title-div">
+                <div class="title-para-grp">
+                    <h1 class="title">Compare <span class="title-color typewrite" data-period="2000"
+                            data-type='[ "Stock", "Sector", "Assets" ]'>
+                            <span class="wrap"></span>
+                        </span> Performance
+                    </h1>
+                    <p class="description">Compare the performance of multiple stocks, sectors or indices against a
+                        benchmark by tracking relative strength and momentum simultaneously and
+                        identify whether an asset is likely to outperform or underperform
+                    </p>
+                </div>
+
+                <div class="help-grp">
+                    <div class="steps-grp">
+                        <div class="step-item">
+                            <i class="ri-file-copy-line"></i>
+                            Duplicate Google Sheet
+                        </div>
+                        <div class="step-item">
+                            <i class="ri-file-edit-line"></i>
+                            Update your data
+                        </div>
+                        <div class="step-item">
+                            <div class="help-icon">
+                                <i class="ri-file-edit-line"></i>
+                            </div>
+                            Enter Sheet ID & Connect
+                        </div>
+                    </div>
+
+                    <button class="btn-video-tutorial" id="yt-tutorial">
+                        <p class="btn-lable">Watch How to customize</p>
+                        <svg class="youtube-logo" width="29" height="20" viewBox="0 0 29 20" fill="none"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <g clip-path="url(#clip0_119_401)">
+                                <g clip-path="url(#clip1_119_401)">
+                                    <path
+                                        d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 1.78814e-07 14.285 0 14.285 0C14.285 0 5.35042 1.78814e-07 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C1.78814e-07 5.35042 0 10 0 10C0 10 1.78814e-07 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z"
+                                        fill="#FF0000" />
+                                    <path d="M11.4253 14.2854L18.8477 10.0004L11.4253 5.71533V14.2854Z" fill="white" />
+                                </g>
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_119_401">
+                                    <rect width="29" height="20" fill="white" />
+                                </clipPath>
+                                <clipPath id="clip1_119_401">
+                                    <rect width="29" height="20" fill="white" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div id="yt-modal" class="modal-bg">
+        <div class="yt-modal-content">
+            <!-- <div class="close-btn" onclick="closeModal('yt-modal')">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"></path></svg>
+            </div> -->
+
+            <iframe id="youtubeVideo" src="" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <section id="data-ctrl-section">
+        <div class="container">
+            <div class="ctrl-div">
+                <div class="input-field">
+                    <label for="sheetSelection" class="input-lable">Select Data</label>
+                    <div class="select-box">
+                        <select id="sheetSelection">
+                            <option value="18MSiV85smac_Hz-WtPjMKo3jBLIUXIgNA3Mdy0z1Pb4">Indian Sectors</option>
+                            <option value="1cX8gjvez-QsAPrXxD-7grV2EP0CDlO076eRP5aZZnV4">Indian Auto Sector</option>
+                            <option value="custom">Custom Data</option>
+                        </select>
+                        <svg class="dropdown-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
+                            fill="currentColor">
+                            <path
+                                d="M12 15.0006L7.75732 10.758L9.17154 9.34375L12 12.1722L14.8284 9.34375L16.2426 10.758L12 15.0006Z">
+                            </path>
+                        </svg>
+                    </div>
+                </div>
+
+                <div id="customSheetInput" class="input-field-right" style="display: none;">
+                    <input type="text" id="customSheetId" placeholder="Enter Custom Sheet ID" class="input-box">
+                    <button id="fetchSheet" class="btn-primary">Fetch</button>
+                    <button id="checkSheet" class="btn-secondary">Check</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="chart-section">
+        <div class="container">
+            <div id="chart_div"></div>
+        </div>
+    </section>
+
+    <section id="chart-ctrl-section">
+        <div class="container">
+            <div class="ctrl-div">
+                <div class="input-field">
+                    <p class="input-lable">Choose Benchmark</p>
+                    <div class="seg-ctrl">
+                        <div id="benchmarkSelection"></div>
+                    </div>
+                </div>
+
+                <div class="input-field">
+                    <label for="tailsInput" class="input-lable">Number of Tails</label>
+                    <input type="number" id="tailsInput" min="2" max="30" value="3" class="input-box">
+                </div>
+                <div class="input-field">
+                    <div class="label-value-grp">
+                        <label for="dateSlider" class="input-lable">Select Date</label>
+                        <div class="input-value-label">
+                            <button id="prevDate" class="btn-stepper">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M11.8284 12.0005L14.6569 14.8289L13.2426 16.2431L9 12.0005L13.2426 7.75781L14.6569 9.17203L11.8284 12.0005Z">
+                                    </path>
+                                </svg>
+                            </button>
+                            <span id="selectedDate" class="slider-value"></span>
+                            <button id="nextDate" class="btn-stepper">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                    <path
+                                        d="M12.1717 12.0005L9.34326 9.17203L10.7575 7.75781L15.0001 12.0005L10.7575 16.2431L9.34326 14.8289L12.1717 12.0005Z">
+                                    </path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="range" id="dateSlider" min="0" max="100" value="100" class="slider">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="cal-ctrl-section">
+        <div class="container">
+            <div class="cal-ctrl-div">
+                <div class="cal-ctrl-head">
+                    <p class="cal-head-label">Customize your logic</p>
+                </div>
+
+                <div class="cal-ctrl-body">
+                    <div class="input-field">
+                        <label for="windowSizeInput" class="input-lable">Window Size:</label>
+                        <input type="number" id="windowSizeInput" class="input-box" min="2" max="200" value="12">
+                    </div>
+
+                    <div class="input-field">
+                        <label for="rocInput" class="input-lable">Rate of Change (ROC):</label>
+                        <input type="number" id="rocInput" class="input-box" min="1" max="200" value="12">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="data-table-section">
+        <div class="container">
+            <div class="table-div">
+                <table id="dataTable">
+                    <thead>
+                        <tr>
+                            <th>
+                                <label class="custom-checkbox">
+                                    <input type="checkbox" id="selectAll" class="checkbox" checked>
+                                    <span class="checkmark">
+                                        <svg width="10" height="8" viewBox="0 0 10 8" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
+                                            <path fill-rule="evenodd" clip-rule="evenodd"
+                                                d="M8.53032 2.53032L9.06065 1.99999L7.99999 0.939331L7.46966 1.46966L3.99999 4.93933L2.53032 3.46966L1.99999 2.93933L0.939331 3.99999L1.46966 4.53032L3.46966 6.53032L3.99999 7.06065L4.53032 6.53032L8.53032 2.53032Z"
+                                                fill="white" />
+                                        </svg>
+                                    </span>
+                                </label>
+                            </th>
+                            <th>Index</th>
+                            <th>Latest Value</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="footer-section">
+        <div class="container">
+            <div class="footer-div">
+                <div class="logo-grp">
+                    <img src="Assets/logo-turn-trace.svg" alt="turn trace logo">
+                </div>
+
+                <div class="footer-links-grp">
+                    <text class="copyrights">Made with ❤️ in India</text>
+                    <button class="footer-link-item" onclick="openModal('about-modal')">About Us</button>
+                    <button class="footer-link-item" onclick="openModal('request-modal')">Got Request?</button>
+                    <a href="" class="footer-link-item">How to add custom data</a>
+                    <a href="" class="footer-link-item">Duplicate Sample Google Sheet</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(initializeChart);
+
+        let data, chart, options;
+        let selectedSheetId = '18MSiV85smac_Hz-WtPjMKo3jBLIUXIgNA3Mdy0z1Pb4';
+        let selectedBenchmark = '';
+        let selectedDate = '';
+        let tailsCount = 3;
+        let windowSize = 12;
+        let roc = 12;
+
+        function initializeChart() {
+            chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+
+            options = {
+                hAxis: { title: 'Relative Strength', minValue: 95, maxValue: 105 },
+                vAxis: { title: 'Relative Momentum', minValue: 95, maxValue: 105 },
+                legend: 'none',
+                tooltip: { isHtml: true },
+                series: {
+                    0: { pointShape: 'circle' }
+                },
+                pointSize: 5,
+                chartArea: { width: '80%', height: '80%' },
+                explorer: {
+                    actions: ['dragToZoom', 'rightClickToReset'],
+                    axis: 'horizontal',
+                    keepInBounds: true,
+                    maxZoomIn: 4.0
+                }
+            };
+
+            fetchData();
+        }
+
+        function fetchData() {
+            const url = `https://docs.google.com/spreadsheets/d/${selectedSheetId}/gviz/tq?tqx=out:csv`;
+            d3.csv(url)
+                .then(rawData => {
+                    processData(rawData);
+                    calculateAndUpdateChart();
+                })
+                .catch(error => {
+                    console.error('Error fetching data:', error);
+                    document.getElementById('chart_div').innerHTML = 'Error loading data. Please check the console for details.';
+                });
+        }
+
+        function processData(rawData) {
+            data = rawData.map(row => {
+                const newRow = { ...row };
+                for (let key in newRow) {
+                    if (key !== Object.keys(newRow)[0] && !isNaN(newRow[key])) {
+                        newRow[key] = Number(newRow[key]);
+                    }
+                }
+                return newRow;
+            });
+            const dateColumnName = Object.keys(data[0])[0];
+            const dates = data.map(d => d[dateColumnName]).filter(d => d);
+            const latestDate = dates[dates.length - 1];
+            selectedDate = latestDate;
+
+            updateDateSlider(dates);
+            updateBenchmarkSelection();
+            updateDataTable();
+        }
+
+        function updateDateSlider(dates) {
+            const slider = document.getElementById('dateSlider');
+            slider.max = dates.length - 1;
+            slider.value = dates.length - 1;
+            document.getElementById('selectedDate').textContent = selectedDate;
+
+            slider.oninput = function () {
+                selectedDate = dates[this.value];
+                document.getElementById('selectedDate').textContent = selectedDate;
+                calculateAndUpdateChart();
+            };
+
+            document.getElementById('prevDate').onclick = function () {
+                if (slider.value > 0) {
+                    slider.value--;
+                    selectedDate = dates[slider.value];
+                    updateSelectedDateDisplay();
+                    calculateAndUpdateChart();
+                }
+            };
+
+            document.getElementById('nextDate').onclick = function () {
+                if (slider.value < dates.length - 1) {
+                    slider.value++;
+                    selectedDate = dates[slider.value];
+                    updateSelectedDateDisplay();
+                    calculateAndUpdateChart();
+                }
+            };
+        }
+
+        function updateBenchmarkSelection() {
+            const benchmarks = Object.keys(data[0]).filter(key => key.startsWith('#'));
+            const container = document.getElementById('benchmarkSelection');
+            benchmarks.forEach((benchmark, index) => {
+                const radio = document.createElement('input');
+                radio.type = 'radio';
+                radio.id = benchmark;
+                radio.name = 'benchmark';
+                radio.value = benchmark;
+                if (index === 0) {
+                    radio.checked = true;
+                    selectedBenchmark = benchmark;
+                }
+                const label = document.createElement('label');
+                label.htmlFor = benchmark;
+                label.textContent = benchmark;
+                container.appendChild(radio);
+                container.appendChild(label);
+            });
+            container.onchange = function (e) {
+                if (e.target.type === 'radio') {
+                    selectedBenchmark = e.target.value;
+                    calculateAndUpdateChart();
+                }
+            };
+        }
+
+        function calculateAndUpdateChart() {
+            const indices = Object.keys(data[0]).filter(key => !key.startsWith('#') && key !== Object.keys(data[0])[0]);
+            const chartData = new google.visualization.DataTable();
+            chartData.addColumn('number', 'RS-Ratio');
+            chartData.addColumn('number', 'RS-Momentum');
+            chartData.addColumn({ type: 'string', role: 'tooltip' });
+            chartData.addColumn({ type: 'string', role: 'style' });
+
+            const colors = d3.schemeCategory10;
+            const indexData = {};
+
+            indices.forEach((index, colorIndex) => {
+                const checkbox = document.querySelector(`input[type="checkbox"][data-index="${index}"]`);
+                if (checkbox && checkbox.checked) {
+                    const values = calculateRSRatioAndMomentumWithTails(index);
+                    if (values) {
+                        indexData[index] = values;
+                        const color = colors[colorIndex % colors.length];
+                        values.forEach((value, i) => {
+                            const isLatestPoint = i === 0;
+                            const pointSize = isLatestPoint ? 10 : 5;
+                            chartData.addRow([
+                                value.rsRatio,
+                                value.rsMomentum,
+                                `${index} (T-${i})\nRS-Ratio: ${value.rsRatio}\nRS-Momentum: ${value.rsMomentum}`,
+                                `color: ${color}; opacity: ${1 - i * 0}; point-size: ${pointSize}`
+                            ]);
+                        });
+                    }
+                }
+            });
+
+            try {
+                chart.draw(chartData, options);
+                drawQuadrants();
+                drawConnectors(indexData, chartData);
+            } catch (error) {
+                console.error('Error drawing chart:', error);
+            }
+        }
+
+        function drawConnectors(indexData, chartData) {
+            const layout = chart.getChartLayoutInterface();
+            const chartArea = layout.getChartAreaBoundingBox();
+
+            const svg = d3.select('#chart_div svg');
+            svg.selectAll('.connector').remove();
+
+            Object.entries(indexData).forEach(([index, values]) => {
+                const points = values.map(value => ({
+                    x: layout.getXLocation(value.rsRatio),
+                    y: layout.getYLocation(value.rsMomentum)
+                }));
+
+                const line = d3.line()
+                    .x(d => d.x)
+                    .y(d => d.y);
+
+                svg.append('path')
+                    .attr('class', 'connector')
+                    .attr('d', line(points))
+                    .attr('fill', 'none')
+                    .attr('stroke', d3.schemeCategory10[chartData.getNumberOfRows() % 10])
+                    .attr('stroke-width', 1)
+                    .attr('opacity', 0.5);
+            });
+        }
+
+        function calculateRSRatioAndMomentumWithTails(index) {
+            const selectedDateIndex = data.findIndex(d => d[Object.keys(d)[0]] === selectedDate);
+            if (selectedDateIndex === -1) return null;
+
+            const results = [];
+            for (let tail = 0; tail < tailsCount; tail++) {
+                const dateIndex = selectedDateIndex - tail;
+                if (dateIndex < 0) break;
+
+                const rs = [];
+                for (let i = Math.max(0, dateIndex - windowSize + 1); i <= dateIndex; i++) {
+                    const indexValue = parseFloat(data[i][index]);
+                    const benchmarkValue = parseFloat(data[i][selectedBenchmark]);
+                    if (!isNaN(indexValue) && !isNaN(benchmarkValue) && benchmarkValue !== 0) {
+                        rs.push((indexValue / benchmarkValue) * 100);
+                    }
+                }
+
+                if (rs.length < windowSize) continue;
+
+                const rsMA = d3.mean(rs);
+                const rsSD = d3.deviation(rs);
+                const rsRatio = 100 + ((rs[rs.length - 1] - rsMA) / rsSD);
+
+                const pastDateIndex = dateIndex - roc;
+                let pastRsRatio;
+                if (pastDateIndex >= 0) {
+                    const pastRs = [];
+                    for (let i = Math.max(0, pastDateIndex - roc + 1); i <= pastDateIndex; i++) {
+                        const indexValue = parseFloat(data[i][index]);
+                        const benchmarkValue = parseFloat(data[i][selectedBenchmark]);
+                        if (!isNaN(indexValue) && !isNaN(benchmarkValue) && benchmarkValue !== 0) {
+                            pastRs.push((indexValue / benchmarkValue) * 100);
+                        }
+                    }
+                    if (pastRs.length === roc) {
+                        const pastRsMA = d3.mean(pastRs);
+                        const pastRsSD = d3.deviation(pastRs);
+                        pastRsRatio = 100 + ((pastRs[pastRs.length - 1] - pastRsMA) / pastRsSD);
+                    }
+                }
+                const rsROC = pastRsRatio ? ((rsRatio / pastRsRatio) - 1) * 100 : null;
+                const rsMomentum = rsROC !== null ? 100 + rsROC : null;
+
+                results.push({
+                    rsRatio: Number(rsRatio.toFixed(2)),
+                    rsMomentum: rsMomentum !== null ? Number(rsMomentum.toFixed(2)) : null
+                });
+            }
+
+            return results.length > 0 ? results : null;
+        }
+
+        function calculateRSRatioAndMomentum(index) {
+            const selectedDateIndex = data.findIndex(d => d[Object.keys(d)[0]] === selectedDate);
+            if (selectedDateIndex === -1) return null;
+
+            const rs = [];
+            for (let i = Math.max(0, selectedDateIndex - windowSize + 1); i <= selectedDateIndex; i++) {
+                const indexValue = parseFloat(data[i][index]);
+                const benchmarkValue = parseFloat(data[i][selectedBenchmark]);
+                if (!isNaN(indexValue) && !isNaN(benchmarkValue) && benchmarkValue !== 0) {
+                    rs.push((indexValue / benchmarkValue) * 100);
+                }
+            }
+
+            if (rs.length < windowSize) return null;
+
+            const rsMA = d3.mean(rs);
+            const rsSD = d3.deviation(rs);
+            const rsRatio = 100 + ((rs[rs.length - 1] - rsMA) / rsSD);
+
+            const pastDateIndex = selectedDateIndex - roc;
+            let pastRsRatio;
+            if (pastDateIndex >= 0) {
+                const pastRs = [];
+                for (let i = Math.max(0, pastDateIndex - roc + 1); i <= pastDateIndex; i++) {
+                    const indexValue = parseFloat(data[i][index]);
+                    const benchmarkValue = parseFloat(data[i][selectedBenchmark]);
+                    if (!isNaN(indexValue) && !isNaN(benchmarkValue) && benchmarkValue !== 0) {
+                        pastRs.push((indexValue / benchmarkValue) * 100);
+                    }
+                }
+                if (pastRs.length === roc) {
+                    const pastRsMA = d3.mean(pastRs);
+                    const pastRsSD = d3.deviation(pastRs);
+                    pastRsRatio = 100 + ((pastRs[pastRs.length - 1] - pastRsMA) / pastRsSD);
+                }
+            }
+            const rsROC = pastRsRatio ? ((rsRatio / pastRsRatio) - 1) * 100 : null;
+            const rsMomentum = rsROC !== null ? 100 + rsROC : null;
+
+            const result = {
+                rsRatio: Number(rsRatio.toFixed(2)),
+                rsMomentum: rsMomentum !== null ? Number(rsMomentum.toFixed(2)) : null
+            };
+            console.log(`${index} - RS-Ratio: ${result.rsRatio}, RS-Momentum: ${result.rsMomentum}`);
+            return result;
+        }
+
+        function drawQuadrants() {
+            const layout = chart.getChartLayoutInterface();
+            const chartArea = layout.getChartAreaBoundingBox();
+
+            const svg = d3.select('#chart_div svg');
+            const defs = svg.append('defs');
+
+            // Define gradients for each quadrant
+            const gradients = [
+                { id: 'leading', color: 'rgba(0, 255, 0, 0.1)' },
+                { id: 'weakening', color: 'rgba(255, 255, 0, 0.1)' },
+                { id: 'lagging', color: 'rgba(255, 0, 0, 0.1)' },
+                { id: 'improving', color: 'rgba(0, 0, 255, 0.1)' }
+            ];
+
+            gradients.forEach(g => {
+                defs.append('linearGradient')
+                    .attr('id', g.id)
+                    .attr('x1', '0%').attr('y1', '0%')
+                    .attr('x2', '100%').attr('y2', '100%')
+                    .html(`<stop offset="0%" stop-color="${g.color}" />
+                   <stop offset="100%" stop-color="${g.color}" />`);
+            });
+
+            // Draw quadrants
+            const quadrants = [
+                { x: chartArea.left + chartArea.width / 2, y: chartArea.top, width: chartArea.width / 2, height: chartArea.height / 2, fill: 'url(#leading)', label: 'Leading' },
+                { x: chartArea.left + chartArea.width / 2, y: chartArea.top + chartArea.height / 2, width: chartArea.width / 2, height: chartArea.height / 2, fill: 'url(#weakening)', label: 'Weakening' },
+                { x: chartArea.left, y: chartArea.top + chartArea.height / 2, width: chartArea.width / 2, height: chartArea.height / 2, fill: 'url(#lagging)', label: 'Lagging' },
+                { x: chartArea.left, y: chartArea.top, width: chartArea.width / 2, height: chartArea.height / 2, fill: 'url(#improving)', label: 'Improving' }
+            ];
+
+            svg.selectAll('.quadrant')
+                .data(quadrants)
+                .enter()
+                .append('rect')
+                .attr('class', 'quadrant')
+                .attr('x', d => d.x)
+                .attr('y', d => d.y)
+                .attr('width', d => d.width)
+                .attr('height', d => d.height)
+                .attr('fill', d => d.fill);
+
+            svg.selectAll('.quadrant-label')
+                .data(quadrants)
+                .enter()
+                .append('text')
+                .attr('class', 'quadrant-label')
+                .attr('x', d => d.x + d.width / 2)
+                .attr('y', d => d.y + d.height / 2)
+                .attr('text-anchor', 'middle')
+                .attr('dominant-baseline', 'middle')
+                .text(d => d.label);
+        }
+
+        function updateDataTable() {
+            const tbody = document.querySelector('#dataTable tbody');
+            tbody.innerHTML = '';
+            const indices = Object.keys(data[0]).filter(key => !key.startsWith('#') && key !== Object.keys(data[0])[0]);
+            indices.forEach(index => {
+                const row = tbody.insertRow();
+                const checkboxCell = row.insertCell();
+
+                // Create the container div for the custom checkbox
+                const customCheckboxDiv = document.createElement('label');
+                customCheckboxDiv.classList.add('custom-checkbox');
+
+
+                // Create the input checkbox element
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = true;
+                checkbox.classList.add('checkbox');
+                checkbox.dataset.index = index;
+                checkbox.onchange = () => calculateAndUpdateChart();
+
+                // Create the span.checkmark for the custom styling
+                const checkmarkSpan = document.createElement('span');
+                checkmarkSpan.classList.add('checkmark');
+
+                // Insert the SVG into the span
+                checkmarkSpan.innerHTML = `
+                    <svg width="10" height="8" viewBox="0 0 10 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M8.53032 2.53032L9.06065 1.99999L7.99999 0.939331L7.46966 1.46966L3.99999 4.93933L2.53032 3.46966L1.99999 2.93933L0.939331 3.99999L1.46966 4.53032L3.46966 6.53032L3.99999 7.06065L4.53032 6.53032L8.53032 2.53032Z"
+                        fill="white" />
+                    </svg>`;
+
+                // Append checkbox and checkmark span to the custom checkbox container
+                customCheckboxDiv.appendChild(checkbox);
+                customCheckboxDiv.appendChild(checkmarkSpan);
+
+                // Append the custom checkbox to the cell
+                checkboxCell.appendChild(customCheckboxDiv);
+
+                // Fill in other table cells
+                row.insertCell().textContent = index;
+                row.insertCell().textContent = Number(data[data.length - 1][index]).toFixed(2);
+
+            });
+            document.getElementById('selectAll').checked = true;
+        }
+
+        function updateAllCheckboxes(checked) {
+            const checkboxes = document.querySelectorAll('#dataTable input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = checked;
+            });
+            calculateAndUpdateChart();
+        }
+
+        document.getElementById('sheetSelection').onchange = function () {
+            if (this.value === 'custom') {
+                document.getElementById('customSheetInput').style.display = 'flex';
+            } else {
+                document.getElementById('customSheetInput').style.display = 'none';
+                selectedSheetId = this.value;
+                fetchData();
+            }
+        };
+
+        document.getElementById('checkSheet').onclick = function () {
+            const customSheetId = document.getElementById('customSheetId').value;
+            console.log('Checking sheet:', customSheetId);
+        };
+
+        document.getElementById('fetchSheet').onclick = function () {
+            const customSheetId = document.getElementById('customSheetId').value;
+            if (customSheetId) {
+                selectedSheetId = customSheetId;
+                fetchData();
+            }
+        };
+
+        function updateSelectedDateDisplay() {
+            document.getElementById('selectedDate').textContent = selectedDate;
+        }
+
+        document.getElementById('tailsInput').onchange = function () {
+            tailsCount = parseInt(this.value);
+            calculateAndUpdateChart();
+        };
+
+        document.getElementById('windowSizeInput').onchange = function () {
+            windowSize = parseInt(this.value);
+            calculateAndUpdateChart();
+        };
+
+        document.getElementById('rocInput').onchange = function () {
+            roc = parseInt(this.value);
+            calculateAndUpdateChart();
+        };
+
+        document.getElementById('selectAll').onchange = function () {
+            updateAllCheckboxes(this.checked);
+        };
+
+        var TxtType = function (el, toRotate, period) {
+            this.toRotate = toRotate;
+            this.el = el;
+            this.loopNum = 0;
+            this.period = parseInt(period, 10) || 2000;
+            this.txt = '';
+            this.tick();
+            this.isDeleting = false;
+        };
+
+        TxtType.prototype.tick = function () {
+            var i = this.loopNum % this.toRotate.length;
+            var fullTxt = this.toRotate[i];
+
+            if (this.isDeleting) {
+                this.txt = fullTxt.substring(0, this.txt.length - 1);
+            } else {
+                this.txt = fullTxt.substring(0, this.txt.length + 1);
+            }
+
+            this.el.innerHTML = '<span class="wrap">' + this.txt + '</span>';
+
+            var that = this;
+            var delta = 200 - Math.random() * 100;
+
+            if (this.isDeleting) { delta /= 2; }
+
+            if (!this.isDeleting && this.txt === fullTxt) {
+                delta = this.period;
+                this.isDeleting = true;
+            } else if (this.isDeleting && this.txt === '') {
+                this.isDeleting = false;
+                this.loopNum++;
+                delta = 500;
+            }
+
+            setTimeout(function () {
+                that.tick();
+            }, delta);
+        };
+
+        window.onload = function () {
+            var elements = document.getElementsByClassName('typewrite');
+            for (var i = 0; i < elements.length; i++) {
+                var toRotate = elements[i].getAttribute('data-type');
+                var period = elements[i].getAttribute('data-period');
+                if (toRotate) {
+                    new TxtType(elements[i], JSON.parse(toRotate), period);
+                }
+            }
+            // INJECT CSS for typing cursor
+            var css = document.createElement("style");
+            css.type = "text/css";
+            css.innerHTML = ".typewrite > .wrap { border-right: 0.08em solid #8F7EE7; }";
+            document.body.appendChild(css);
+        };
+
+        // Function to open modal
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = "block";
+            document.getElementById('youtubeVideo').src = "";
+        }
+
+        // Function to close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = "none";
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal-bg')) {
+                event.target.style.display = "none";
+            }
+            if (event.target == document.getElementById('yt-modal')) {
+                document.getElementById('yt-modal').style.display = 'none';
+                document.getElementById('youtubeVideo').src = "";
+            }
+        }
+
+        document.getElementById('yt-tutorial').addEventListener('click', function () {
+            document.getElementById('yt-modal').style.display = 'flex';
+            document.getElementById('youtubeVideo').src = "https://www.youtube.com/embed/jBl6s5wBL1s?autoplay=1";
+        });
+
+        document.getElementById('duplicate-sheet').addEventListener('click', () => {
+            window.open('https://docs.google.com/spreadsheets/d/18MSiV85smac_Hz-WtPjMKo3jBLIUXIgNA3Mdy0z1Pb4/edit?gid=557352571#gid=557352571', '_blank');
+        })
+    </script>
+</body>
+
+</html>
