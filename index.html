@@ -22,7 +22,7 @@
     <link href="https://cdn.jsdelivr.net/npm/remixicon@4.4.0/fonts/remixicon.css" rel="stylesheet" />
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
-    <script src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
@@ -267,28 +267,30 @@
                         </div>
                     </div>
 
-                    <button class="btn-video-tutorial" id="yt-tutorial">
-                        <p class="btn-lable">Watch How to customize</p>
-                        <svg class="youtube-logo" width="29" height="20" viewBox="0 0 29 20" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <g clip-path="url(#clip0_119_401)">
-                                <g clip-path="url(#clip1_119_401)">
-                                    <path
-                                        d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 1.78814e-07 14.285 0 14.285 0C14.285 0 5.35042 1.78814e-07 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C1.78814e-07 5.35042 0 10 0 10C0 10 1.78814e-07 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z"
-                                        fill="#FF0000" />
-                                    <path d="M11.4253 14.2854L18.8477 10.0004L11.4253 5.71533V14.2854Z" fill="white" />
+                    <div class="help-btn-grp">
+                        <button class="btn-video-tutorial" id="yt-tutorial">
+                            <p class="btn-lable">Watch How to customize</p>
+                            <svg class="youtube-logo" width="29" height="20" viewBox="0 0 29 20" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g clip-path="url(#clip0_119_401)">
+                                    <g clip-path="url(#clip1_119_401)">
+                                        <path
+                                            d="M27.9727 3.12324C27.6435 1.89323 26.6768 0.926623 25.4468 0.597366C23.2197 1.78814e-07 14.285 0 14.285 0C14.285 0 5.35042 1.78814e-07 3.12323 0.597366C1.89323 0.926623 0.926623 1.89323 0.597366 3.12324C1.78814e-07 5.35042 0 10 0 10C0 10 1.78814e-07 14.6496 0.597366 16.8768C0.926623 18.1068 1.89323 19.0734 3.12323 19.4026C5.35042 20 14.285 20 14.285 20C14.285 20 23.2197 20 25.4468 19.4026C26.6768 19.0734 27.6435 18.1068 27.9727 16.8768C28.5701 14.6496 28.5701 10 28.5701 10C28.5701 10 28.5677 5.35042 27.9727 3.12324Z"
+                                            fill="#FF0000" />
+                                        <path d="M11.4253 14.2854L18.8477 10.0004L11.4253 5.71533V14.2854Z" fill="white" />
+                                    </g>
                                 </g>
-                            </g>
-                            <defs>
-                                <clipPath id="clip0_119_401">
-                                    <rect width="29" height="20" fill="white" />
-                                </clipPath>
-                                <clipPath id="clip1_119_401">
-                                    <rect width="29" height="20" fill="white" />
-                                </clipPath>
-                            </defs>
-                        </svg>
-                    </button>
+                                <defs>
+                                    <clipPath id="clip0_119_401">
+                                        <rect width="29" height="20" fill="white" />
+                                    </clipPath>
+                                    <clipPath id="clip1_119_401">
+                                        <rect width="29" height="20" fill="white" />
+                                    </clipPath>
+                                </defs>
+                            </svg>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -335,7 +337,7 @@
 
     <section id="chart-section">
         <div class="container">
-            <div id="chart_div"></div>
+            <canvas id="chart_div"></canvas>
         </div>
     </section>
 
@@ -442,6 +444,7 @@
                     <text class="copyrights">Made with ❤️ in India</text>
                     <button class="footer-link-item" onclick="openModal('about-modal')">About Us</button>
                     <button class="footer-link-item" onclick="openModal('request-modal')">Got Request?</button>
+                    <button class="footer-link-item" onclick="openModal('support-modal')">Support Us</button>
                     <a href="" class="footer-link-item">How to add custom data</a>
                     <a href="" class="footer-link-item">Duplicate Sample Google Sheet</a>
                 </div>
@@ -449,10 +452,7 @@
         </div>
     </section>
 
-    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-        google.charts.load('current', { 'packages': ['corechart'] });
-        google.charts.setOnLoadCallback(initializeChart);
-
+    <script>
         let data, chart, options;
         let selectedSheetId = '18MSiV85smac_Hz-WtPjMKo3jBLIUXIgNA3Mdy0z1Pb4';
         let selectedBenchmark = '';
@@ -461,26 +461,90 @@
         let windowSize = 12;
         let roc = 12;
 
-        function initializeChart() {
-            chart = new google.visualization.ScatterChart(document.getElementById('chart_div'));
+        // Custom plugin for drawing connectors
+        const connectorsPlugin = {
+            id: 'connectors',
+            afterDatasetDraw(chart, args, options) {
+                const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
 
-            options = {
-                hAxis: { title: 'Relative Strength', minValue: 95, maxValue: 105 },
-                vAxis: { title: 'Relative Momentum', minValue: 95, maxValue: 105 },
-                legend: 'none',
-                tooltip: { isHtml: true },
-                series: {
-                    0: { pointShape: 'circle' }
-                },
-                pointSize: 5,
-                chartArea: { width: '80%', height: '80%' },
-                explorer: {
-                    actions: ['dragToZoom', 'rightClickToReset'],
-                    axis: 'horizontal',
-                    keepInBounds: true,
-                    maxZoomIn: 4.0
+                ctx.save();
+
+                for (let i = 0; i < chart.data.datasets.length; i++) {
+                    const dataset = chart.data.datasets[i];
+                    ctx.strokeStyle = dataset.borderColor;
+                    ctx.lineWidth = 1;
+                    ctx.setLineDash([5, 5]);
+                    ctx.beginPath();
+
+                    for (let j = 0; j < dataset.data.length - 1; j++) {
+                        const startPoint = chart.getDatasetMeta(i).data[j];
+                        const endPoint = chart.getDatasetMeta(i).data[j + 1];
+
+                        ctx.moveTo(startPoint.x, startPoint.y);
+                        ctx.lineTo(endPoint.x, endPoint.y);
+                    }
+
+                    ctx.stroke();
                 }
-            };
+
+                ctx.restore();
+            }
+        };
+
+        function initializeChart() {
+            const ctx = document.getElementById('chart_div').getContext('2d');
+            chart = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: []
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'Relative Strength'
+                            },
+                            min: 95,
+                            max: 105
+                        },
+                        y: {
+                            type: 'linear',
+                            position: 'left',
+                            title: {
+                                display: true,
+                                text: 'Relative Momentum'
+                            },
+                            min: 95,
+                            max: 105
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const point = context.raw;
+                                    return `${point.label} (T-${point.tail})
+                                    RS-Ratio: ${point.x}
+                                    RS-Momentum: ${point.y}`;
+                                }
+                            }
+                        },
+                        legend: {
+                            display: false,
+                            position: 'bottom'
+                        }
+                    },
+                    animation: {
+                        duration: 0
+                    },
+                },
+                plugins: [connectorsPlugin]
+            });
 
             fetchData();
         }
@@ -552,6 +616,7 @@
         function updateBenchmarkSelection() {
             const benchmarks = Object.keys(data[0]).filter(key => key.startsWith('#'));
             const container = document.getElementById('benchmarkSelection');
+            container.innerHTML = ''; // Clear existing content
             benchmarks.forEach((benchmark, index) => {
                 const radio = document.createElement('input');
                 radio.type = 'radio';
@@ -578,43 +643,37 @@
 
         function calculateAndUpdateChart() {
             const indices = Object.keys(data[0]).filter(key => !key.startsWith('#') && key !== Object.keys(data[0])[0]);
-            const chartData = new google.visualization.DataTable();
-            chartData.addColumn('number', 'RS-Ratio');
-            chartData.addColumn('number', 'RS-Momentum');
-            chartData.addColumn({ type: 'string', role: 'tooltip' });
-            chartData.addColumn({ type: 'string', role: 'style' });
+            const datasets = [];
 
             const colors = d3.schemeCategory10;
-            const indexData = {};
 
             indices.forEach((index, colorIndex) => {
                 const checkbox = document.querySelector(`input[type="checkbox"][data-index="${index}"]`);
                 if (checkbox && checkbox.checked) {
                     const values = calculateRSRatioAndMomentumWithTails(index);
                     if (values) {
-                        indexData[index] = values;
                         const color = colors[colorIndex % colors.length];
-                        values.forEach((value, i) => {
-                            const isLatestPoint = i === 0;
-                            const pointSize = isLatestPoint ? 10 : 5;
-                            chartData.addRow([
-                                value.rsRatio,
-                                value.rsMomentum,
-                                `${index} (T-${i})\nRS-Ratio: ${value.rsRatio}\nRS-Momentum: ${value.rsMomentum}`,
-                                `color: ${color}; opacity: ${1 - i * 0}; point-size: ${pointSize}`
-                            ]);
-                        });
+                        const dataset = {
+                            label: index,
+                            data: values.map((value, i) => ({
+                                x: value.rsRatio,
+                                y: value.rsMomentum,
+                                label: index,
+                                tail: i
+                            })),
+                            backgroundColor: color,
+                            borderColor: color,
+                            pointRadius: values.map((_, i) => i === 0 ? 10 : 5),
+                            pointHoverRadius: values.map((_, i) => i === 0 ? 12 : 7)
+                        };
+                        datasets.push(dataset);
                     }
                 }
             });
 
-            try {
-                chart.draw(chartData, options);
-                drawQuadrants();
-                drawConnectors(indexData, chartData);
-            } catch (error) {
-                console.error('Error drawing chart:', error);
-            }
+            chart.data.datasets = datasets;
+            chart.update('none');
+            drawQuadrants();
         }
 
         function drawConnectors(indexData, chartData) {
@@ -745,58 +804,30 @@
         }
 
         function drawQuadrants() {
-            const layout = chart.getChartLayoutInterface();
-            const chartArea = layout.getChartAreaBoundingBox();
-
-            const svg = d3.select('#chart_div svg');
-            const defs = svg.append('defs');
-
-            // Define gradients for each quadrant
-            const gradients = [
-                { id: 'leading', color: 'rgba(0, 255, 0, 0.1)' },
-                { id: 'weakening', color: 'rgba(255, 255, 0, 0.1)' },
-                { id: 'lagging', color: 'rgba(255, 0, 0, 0.1)' },
-                { id: 'improving', color: 'rgba(0, 0, 255, 0.1)' }
-            ];
-
-            gradients.forEach(g => {
-                defs.append('linearGradient')
-                    .attr('id', g.id)
-                    .attr('x1', '0%').attr('y1', '0%')
-                    .attr('x2', '100%').attr('y2', '100%')
-                    .html(`<stop offset="0%" stop-color="${g.color}" />
-                   <stop offset="100%" stop-color="${g.color}" />`);
-            });
-
-            // Draw quadrants
             const quadrants = [
-                { x: chartArea.left + chartArea.width / 2, y: chartArea.top, width: chartArea.width / 2, height: chartArea.height / 2, fill: 'url(#leading)', label: 'Leading' },
-                { x: chartArea.left + chartArea.width / 2, y: chartArea.top + chartArea.height / 2, width: chartArea.width / 2, height: chartArea.height / 2, fill: 'url(#weakening)', label: 'Weakening' },
-                { x: chartArea.left, y: chartArea.top + chartArea.height / 2, width: chartArea.width / 2, height: chartArea.height / 2, fill: 'url(#lagging)', label: 'Lagging' },
-                { x: chartArea.left, y: chartArea.top, width: chartArea.width / 2, height: chartArea.height / 2, fill: 'url(#improving)', label: 'Improving' }
+                { x: 100, y: 100, width: 5, height: 5, fill: 'rgba(0, 255, 0, 0.1)', label: 'Leading' },
+                { x: 100, y: 95, width: 5, height: 5, fill: 'rgba(255, 255, 0, 0.1)', label: 'Weakening' },
+                { x: 95, y: 95, width: 5, height: 5, fill: 'rgba(255, 0, 0, 0.1)', label: 'Lagging' },
+                { x: 95, y: 100, width: 5, height: 5, fill: 'rgba(0, 0, 255, 0.1)', label: 'Improving' }
             ];
 
-            svg.selectAll('.quadrant')
-                .data(quadrants)
-                .enter()
-                .append('rect')
-                .attr('class', 'quadrant')
-                .attr('x', d => d.x)
-                .attr('y', d => d.y)
-                .attr('width', d => d.width)
-                .attr('height', d => d.height)
-                .attr('fill', d => d.fill);
+            chart.options.plugins.annotation = {
+                annotations: quadrants.map(q => ({
+                    type: 'box',
+                    xMin: q.x,
+                    xMax: q.x + q.width,
+                    yMin: q.y,
+                    yMax: q.y + q.height,
+                    backgroundColor: q.fill,
+                    borderColor: 'transparent',
+                    label: {
+                        content: q.label,
+                        position: 'center'
+                    }
+                }))
+            };
 
-            svg.selectAll('.quadrant-label')
-                .data(quadrants)
-                .enter()
-                .append('text')
-                .attr('class', 'quadrant-label')
-                .attr('x', d => d.x + d.width / 2)
-                .attr('y', d => d.y + d.height / 2)
-                .attr('text-anchor', 'middle')
-                .attr('dominant-baseline', 'middle')
-                .text(d => d.label);
+            chart.update();
         }
 
         function updateDataTable() {
@@ -943,6 +974,7 @@
         };
 
         window.onload = function () {
+            initializeChart();
             var elements = document.getElementsByClassName('typewrite');
             for (var i = 0; i < elements.length; i++) {
                 var toRotate = elements[i].getAttribute('data-type');
