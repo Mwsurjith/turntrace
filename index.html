@@ -23,6 +23,7 @@
 
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-annotation/2.1.0/chartjs-plugin-annotation.min.js"></script>
 </head>
 
 <body>
@@ -461,33 +462,59 @@
         let windowSize = 12;
         let roc = 12;
 
-        // Custom plugin for drawing connectors
-        const connectorsPlugin = {
-            id: 'connectors',
-            afterDatasetDraw(chart, args, options) {
-                const { ctx, chartArea: { top, bottom, left, right, width, height } } = chart;
+        // Custom plugin for drawing connectors and arrows
+        const customDrawPlugin = {
+            id: 'customDraw',
+            beforeDatasetsDraw(chart, args, options) {
+                const { ctx } = chart;
 
-                ctx.save();
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
 
-                for (let i = 0; i < chart.data.datasets.length; i++) {
-                    const dataset = chart.data.datasets[i];
+                    // Draw connectors
+                    ctx.save();
                     ctx.strokeStyle = dataset.borderColor;
                     ctx.lineWidth = 1;
                     ctx.setLineDash([5, 5]);
                     ctx.beginPath();
 
-                    for (let j = 0; j < dataset.data.length - 1; j++) {
-                        const startPoint = chart.getDatasetMeta(i).data[j];
-                        const endPoint = chart.getDatasetMeta(i).data[j + 1];
+                    for (let j = 0; j < meta.data.length - 1; j++) {
+                        const startPoint = meta.data[j];
+                        const endPoint = meta.data[j + 1];
 
                         ctx.moveTo(startPoint.x, startPoint.y);
                         ctx.lineTo(endPoint.x, endPoint.y);
                     }
 
                     ctx.stroke();
-                }
+                    ctx.restore();
+                });
+            },
+            afterDatasetsDraw(chart, args, options) {
+                const { ctx } = chart;
 
-                ctx.restore();
+                chart.data.datasets.forEach((dataset, i) => {
+                    const meta = chart.getDatasetMeta(i);
+
+                    // Draw arrow for t-0 point
+                    if (meta.data.length > 1) {
+                        const point = meta.data[0];
+                        const prevPoint = meta.data[1];
+                        const angle = Math.atan2(prevPoint.y - point.y, prevPoint.x - point.x);
+
+                        ctx.save();
+                        ctx.translate(point.x, point.y);
+                        ctx.rotate(angle + Math.PI); // Rotate 180 degrees
+                        ctx.fillStyle = dataset.backgroundColor;
+                        ctx.beginPath();
+                        ctx.moveTo(0, 0);
+                        ctx.lineTo(-7, -5);
+                        ctx.lineTo(-7, 5);
+                        ctx.closePath();
+                        ctx.fill();
+                        ctx.restore();
+                    }
+                });
             }
         };
 
@@ -500,24 +527,32 @@
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true,
+                    maintainAspectRatio: false,
                     scales: {
                         x: {
                             type: 'linear',
                             position: 'bottom',
                             title: {
                                 display: true,
-                                text: 'Relative Strength'
+                                text: 'Relative Strength',
+                                font: {
+                                    size: 12,
+                                    family: 'Space Grotesk',
+                                }
                             },
                             min: 95,
-                            max: 105
+                            max: 105,
                         },
                         y: {
                             type: 'linear',
                             position: 'left',
                             title: {
                                 display: true,
-                                text: 'Relative Momentum'
+                                text: 'Relative Momentum',
+                                font: {
+                                    size: 12,
+                                    family: 'Space Grotesk',
+                                }
                             },
                             min: 95,
                             max: 105
@@ -529,21 +564,41 @@
                                 label: function(context) {
                                     const point = context.raw;
                                     return `${point.label} (T-${point.tail})
-                                    RS-Ratio: ${point.x}
-                                    RS-Momentum: ${point.y}`;
+                                    RS-Ratio: ${point.x.toFixed(2)}
+                                    RS-Momentum: ${point.y.toFixed(2)}`;
                                 }
                             }
                         },
                         legend: {
                             display: false,
-                            position: 'bottom'
+                            position: 'bottom'                          
                         }
                     },
                     animation: {
                         duration: 0
                     },
+                    onHover: (event, activeElements) => {
+                        const target = event.native.target;
+                        target.style.cursor = activeElements.length ? 'pointer' : 'default';
+                        
+                        // Add hover effect for arrow
+                        if (activeElements.length > 0) {
+                            const datasetIndex = activeElements[0].datasetIndex;
+                            const index = activeElements[0].index;
+                            if (index === 0) { // t-0 point
+                                const dataset = chart.data.datasets[datasetIndex];
+                                dataset.pointHoverRadius[0] = 8; // Increase hover radius for t-0 point
+                                chart.update();
+                            }
+                        } else {
+                            chart.data.datasets.forEach(dataset => {
+                                dataset.pointHoverRadius[0] = 5; // Reset hover radius
+                            });
+                            chart.update();
+                        }
+                    }
                 },
-                plugins: [connectorsPlugin]
+                plugins: [customDrawPlugin]
             });
 
             fetchData();
@@ -651,7 +706,7 @@
                 const checkbox = document.querySelector(`input[type="checkbox"][data-index="${index}"]`);
                 if (checkbox && checkbox.checked) {
                     const values = calculateRSRatioAndMomentumWithTails(index);
-                    if (values) {
+                    if (values && values.length >= 2) {
                         const color = colors[colorIndex % colors.length];
                         const dataset = {
                             label: index,
@@ -663,8 +718,8 @@
                             })),
                             backgroundColor: color,
                             borderColor: color,
-                            pointRadius: values.map((_, i) => i === 0 ? 10 : 5),
-                            pointHoverRadius: values.map((_, i) => i === 0 ? 12 : 7)
+                            pointRadius: values.map((_, i) => i === 0 ? 0 : 3), // Set radius to 0 for t-0 point
+                            pointHoverRadius: values.map((_, i) => i === 0 ? 0 : 5), // Set hover radius for t-0 point
                         };
                         datasets.push(dataset);
                     }
@@ -672,7 +727,7 @@
             });
 
             chart.data.datasets = datasets;
-            chart.update('none');
+            chart.update();
             drawQuadrants();
         }
 
@@ -805,10 +860,10 @@
 
         function drawQuadrants() {
             const quadrants = [
-                { x: 100, y: 100, width: 5, height: 5, fill: 'rgba(0, 255, 0, 0.1)', label: 'Leading' },
-                { x: 100, y: 95, width: 5, height: 5, fill: 'rgba(255, 255, 0, 0.1)', label: 'Weakening' },
-                { x: 95, y: 95, width: 5, height: 5, fill: 'rgba(255, 0, 0, 0.1)', label: 'Lagging' },
-                { x: 95, y: 100, width: 5, height: 5, fill: 'rgba(0, 0, 255, 0.1)', label: 'Improving' }
+                { x: 100, y: 100, width: 5, height: 5, fill: 'rgba(39, 129, 207, 0.08)', label: 'Leading' },
+                { x: 100, y: 95, width: 5, height: 5, fill: 'rgba(34, 211, 58, 0.08)', label: 'Weakening' },
+                { x: 95, y: 95, width: 5, height: 5, fill: 'rgba(211, 58, 34, 0.08)', label: 'Lagging' },
+                { x: 95, y: 100, width: 5, height: 5, fill: 'rgba(211, 211, 34, 0.08)', label: 'Improving' }
             ];
 
             chart.options.plugins.annotation = {
